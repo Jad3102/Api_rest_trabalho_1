@@ -104,7 +104,7 @@ servidor.post( '/cadastroADM' , (req, res, next) => {
       })
       .catch(next);
   });
-  
+
 servidor.post( '/criacaoProduto' , (req, res, next) => {
     knex('produtos')
       .insert(req.body)
@@ -141,5 +141,28 @@ servidor.del( '/exclusaoProduto/:idProduto' , (req, res, next) => {
             res.send( "Produto Deletado" );
         }, next) ; 
 });
+
+server.post('/login', (req, res, next) => {
+    const { username, password } = req.body;
+  
+    const query = `SELECT id, senha FROM usuarios WHERE nome_usuario = ?`;
+    connection.query(query, [username], (err, results) => {
+      if (err) {
+        console.error(err);
+        return res.send(500, { error: 'Erro no servidor' });
+      }
+  
+      if (results.length === 0) {
+        return res.send(404, { error: 'Usuário não encontrado' });
+      }
+  
+      const usuario = results[0];
+      if (usuario.senha === password) {
+        return res.send(200, { message: 'Autenticação bem-sucedida' });
+      } else {
+        return res.send(401, { error: 'Senha incorreta' });
+      }
+    });
+  });
 
 
