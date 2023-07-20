@@ -7,14 +7,46 @@
     <title>Pedidos</title>
 </head>
 <body>
+  <h1>Área de Pedidos:</h1>
 
     <ul>
-      <li><a href="#" onclick="mostrarConteudo('listarPedidos')">Listar Pedidos</a></li>
-      <li><a href="#" onclick="mostrarConteudo('realizarPedidos')">Realizar Pedidos</a></li>
-      <li><a href="#" onclick="mostrarConteudo('editarPedidos')">Editar Pedidos</a></li>
-      <li><a href="#" onclick="mostrarConteudo('excluirPedidos')">excluirPedidos</a></li>
+      <li><a href="#" onclick="mostrarListarPedidos()">Listar Pedidos</a></li>
+      <li><a href="#" onclick="mostrarAdicionarPedidos()">Adicionar Pedidos</a></li>
+      <li><a href="#" onclick="mostarEditarPedidos()">Editar Pedidos</a></li>
+      <li><a href="#" onclick="mostrarExcluirPedidos()">excluirPedidos</a></li>
     </ul>
 
+
+    <table id="tabelaPedidos">
+        
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Horario</th>
+          <th>Endereço</th>
+          <th>Número Cliente</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Aqui serão adicionadas as linhas com os dados -->
+      </tbody>
+    </table>
+    <hr>
+
+    <h2>Fazer Pedido:</h2>
+    <form id="tabelaAdicionarPedidos"> 
+      
+      <label for="horario">Horário:</label>
+      <input type="datetime" id="horario" name="horario" required><br><br>
+  
+      <label for="endereco">Endereço:</label>
+      <input type="text" id="endereco" name="endereco" required><br><br>
+    
+      <label for="cliente">Número do cliente:</label>
+      <input type="number" id="cliente_id" name="cliente_id" required><br><br>
+  
+      <input type="submit" value="Fazer Pedido" onclick="adicionarPedidos()">
+    </form>
       
     <script src="../script.js"></script>
 </body>

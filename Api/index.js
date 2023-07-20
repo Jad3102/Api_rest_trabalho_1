@@ -42,14 +42,17 @@ servidor.get( '/produtosDisponiveis' , (req, res, next) => {
     }, next) ; 
 });
 
-servidor.post( '/cadastroCliente' , (req, res, next) => {
-    knex('pedidos')
+servidor.post('/cadastroCliente', (req, res, next) => {
+  knex('clientes')
       .insert(req.body)
       .then((dados) => {
         res.send(dados);
       })
       .catch(next);
+      res.send( "Cliente cadastrado!" );
   });
+
+
 
 servidor.post( '/fazerPedido' , (req, res, next) => {
     knex('pedidos')
@@ -103,6 +106,7 @@ servidor.post( '/cadastroADM' , (req, res, next) => {
         res.send(dados);
       })
       .catch(next);
+      res.send( "ADM Cadastrado" );
   });
 
 servidor.post( '/criacaoProduto' , (req, res, next) => {
@@ -142,27 +146,32 @@ servidor.del( '/exclusaoProduto/:idProduto' , (req, res, next) => {
         }, next) ; 
 });
 
-server.post('/login', (req, res, next) => {
-    const { username, password } = req.body;
-  
-    const query = `SELECT id, senha FROM usuarios WHERE nome_usuario = ?`;
-    connection.query(query, [username], (err, results) => {
-      if (err) {
-        console.error(err);
-        return res.send(500, { error: 'Erro no servidor' });
-      }
-  
-      if (results.length === 0) {
-        return res.send(404, { error: 'Usuário não encontrado' });
-      }
-  
-      const usuario = results[0];
-      if (usuario.senha === password) {
-        return res.send(200, { message: 'Autenticação bem-sucedida' });
-      } else {
-        return res.send(401, { error: 'Senha incorreta' });
-      }
-    });
-  });
+servidor.post('/login', async (req,res) => {
+  const { username, password } = req.body;
+
+  try {
+    // Consulta o usuário pelo nome de usuário fornecido
+    const user = await knex('administrador').where('username', username).first();
+
+    if (!user) {
+      // Caso o usuário não seja encontrado, retorna uma mensagem de erro
+      return res.send('Usuário não encontrado');
+    }
+
+    // Verifica se a senha informada corresponde à senha armazenada no banco de dados
+    if (password !== user.password) {
+      return res.send('Senha incorreta');
+    }
+
+    // Caso o usuário e a senha estejam corretos, retorna uma mensagem de sucesso
+    return res.send('Login realizado com sucesso');
+
+  } catch (error) {
+    console.error('Erro ao verificar usuário:', error);
+    return res.send('Erro no servidor');
+  }
+});
+
+
 
 
